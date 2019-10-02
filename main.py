@@ -1,20 +1,21 @@
-from flask import Flask
-import pickle
+from flask import Flask, request, redirect, url_for, flash, jsonify
+import numpy as np
+import pickle as p
+import json
 
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=['POST'])
 
-def hello():
-
-    model_file = open('model.sav', 'rb')
-    data = pickle.load(model_file)
-
-    p = [[658.06, 541299235, 502757091]]
-    pr =  data.predict(p)
-    return pr
+def makecalc():
+    data = request.get_json()
+    prediction = np.array2string(model.predict(data))
+   
+    return jsonify(prediction)
 
 
 if __name__ == '__main__':
+    modelfile = 'final_prediction.pickle'
+    model = p.load(open(modelfile, 'rb'))
     app.run(debug=True)
